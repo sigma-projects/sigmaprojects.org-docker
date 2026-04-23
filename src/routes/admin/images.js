@@ -47,33 +47,27 @@ router.post('/upload', auth, async (req, res) => {
   const projectid = parseInt(req.body.projectid || req.query.projectid) || null;
 
   try {
-    const sizes = [
-      { key: 'small',       w: 100,  h: 100,  fit: 'cover' },
-      { key: 'medium',      w: 250,  h: 250,  fit: 'cover' },
-      { key: 'medium_wide', w: 954,  h: 533,  fit: 'cover' },
-      { key: 'large',       w: 450,  h: 450,  fit: 'cover' },
-    ];
-
-    if (!projectid) return res.json({ success: false, error: 'Missing projectid' });
+    if (!projectid) return res.json({ success: false, error: 'Save project before uploading images' });
 
     // Insert row first to get the real ID
     const info = db.prepare(`INSERT INTO gallery (projectid, name, sort_order) VALUES (?, ?, 9999)`)
       .run(projectid, originalname);
     const galleryId = info.lastInsertRowid;
 
-    const paths = {};
-    for (const sz of sizes) {
-      const fname = `${galleryId}_${sz.key}.jpg`;
-      await sharp(buf)
-        .resize(sz.w, sz.h, { fit: sz.fit })
-        .jpeg({ quality: 85 })
-        .toFile(path.join(GALLERY_DIR, fname));
-      paths[sz.key] = `/uploads/gallery/${fname}`;
-    }
-    // Save original
+    // Save original with 95% quality (no resize)
     const origFname = `${galleryId}_original.jpg`;
-    await sharp(buf).jpeg({ quality: 90 }).toFile(path.join(GALLERY_DIR, origFname));
-    paths.original = `/uploads/gallery/${origFname}`;
+    await sharp(buf)
+      .jpeg({ quality: 95 })
+      .toFile(path.join(GALLERY_DIR, origFname));
+    const originalPath = `/uploads/gallery/${origFname}`;
+
+    // Save thumbnail with 80% quality, maintaining aspect ratio
+    const thumbFname = `${galleryId}_small.jpg`;
+    await sharp(buf)
+      .resize({ width: 300, withoutEnlargement: true })
+      .jpeg({ quality: 80 })
+      .toFile(path.join(GALLERY_DIR, thumbFname));
+    const thumbPath = `/uploads/gallery/${thumbFname}`;
 
     const meta = await sharp(buf).metadata();
 
@@ -82,8 +76,8 @@ router.post('/upload', auth, async (req, res) => {
       thumb_medium_wide_path=?, thumb_large_path=?,
       width=?, height=?, name=?
       WHERE id=?`).run(
-      paths.original, paths.small, paths.medium,
-      paths.medium_wide, paths.large,
+      originalPath, thumbPath, originalPath,
+      originalPath, originalPath,
       meta.width || 0, meta.height || 0, originalname,
       galleryId
     );

@@ -51,7 +51,7 @@ router.post('/upload', auth, async (req, res) => {
   }
 
   const projectid = parseInt(req.body.projectid || req.query.projectid) || null;
-  if (!projectid) return res.json({ success: false, error: 'Missing projectid' });
+  if (!projectid) return res.json({ success: false, error: 'Save project before uploading files' });
   const info = db.prepare(
     'INSERT INTO files (projectid, name, title, size, file_path) VALUES (?, ?, ?, ?, ?)'
   ).run(projectid, originalname, originalname, filesize, filepath);
