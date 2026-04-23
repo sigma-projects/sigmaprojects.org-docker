@@ -13,8 +13,8 @@ logs/
 *.log
 coverage/
 .nyc_output/
-dist/
-build/
+/dist/
+/build/
 
 # Environment
 .env
