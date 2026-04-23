@@ -27,7 +27,7 @@ app.use(express.json({ limit: '50mb' }));
 // --- Sessions ---
 const SQLiteStore = require('connect-sqlite3')(session);
 app.use(session({
-  store: new SQLiteStore({ db: 'sigmaprojects.db', dir: path.join(__dirname, '../data') }),
+  store: new SQLiteStore({ db: 'sessions.db', dir: path.join(__dirname, '../data') }),
   secret: process.env.SESSION_SECRET || 'dev-secret-change-me',
   resave: false,
   saveUninitialized: false,
