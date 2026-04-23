@@ -1,0 +1,42 @@
+<section id="portfolio" class="section portfolio">
+  <div class="container">
+    <div class="section-content">
+      <% if (subtypes && subtypes.length > 0) { %>
+      <div class="main_content">
+        <div class="isotop-filter" id="filters">
+          <button type="button" class="btn btn-isotop is-checked" data-filter="*">All</button>
+          <% subtypes.forEach(function(subtype) { %>
+            <button type="button" class="btn btn-isotop" data-filter=".<%= subtype %>"><%= subtype %></button>
+          <% }); %>
+        </div>
+      </div>
+      <% } %>
+    </div>
+  </div>
+
+  <div class="container portfolio-grid three-col">
+    <ul id="da-thumbs" class="da-thumbs isotope">
+      <% projects.forEach(function(p) {
+        const classes = p.subtype ? p.subtype.split(',').map(s => s.trim()).join(' ') : '';
+      %>
+        <li data-category="<%= p.subtype %>" class="<%= classes %>">
+          <a href="/p/<%= p.ses_title %>">
+            <% if (p.thumbnail_path) { %>
+              <img src="<%= p.thumbnail_path %>" alt="<%= p.title %>" />
+            <% } else { %>
+              <img src="/projectthumb/<%= p.projectid %>" alt="<%= p.title %>" />
+            <% } %>
+            <div class="portfolio-detail-overlay">
+              <div class="middle-align-wrap">
+                <div class="middle-align-cell">
+                  <h4><%= p.title %></h4>
+                  <span><%= p.description %></span>
+                </div>
+              </div>
+            </div>
+          </a>
+        </li>
+      <% }); %>
+    </ul>
+  </div>
+</section>

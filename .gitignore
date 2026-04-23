@@ -1,0 +1,41 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn
+pids/
+*.pid
+*.seed
+*.pid.lock
+logs/
+*.log
+coverage/
+.nyc_output/
+dist/
+build/
+
+# Environment
+.env
+
+# SQLite data
+data/*.db
+data/*.db-shm
+data/*.db-wal
+
+# Uploads (preserve directory structure via .gitkeep)
+uploads/thumbnails/*
+uploads/gallery/*
+uploads/files/*
+!uploads/thumbnails/.gitkeep
+!uploads/gallery/.gitkeep
+!uploads/files/.gitkeep
+!data/.gitkeep
+
+# Docker
+.docker/
+
+# OS
+.DS_Store
+Thumbs.db

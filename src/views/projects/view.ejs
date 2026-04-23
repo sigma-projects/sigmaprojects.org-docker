@@ -1,0 +1,229 @@
+<style>
+  /* ── Project View ─────────────────────────────── */
+  #single-portfolio { padding: 1.5rem 0 4rem; }
+
+  /* Header */
+  .pv-header { padding-bottom: 1.25rem; border-bottom: 1px solid #e8e8e8; margin-bottom: 1.5rem; }
+  .pv-meta-row { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; margin-bottom: .7rem; }
+  .pv-type-badge { font-size: 1.25rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #888; }
+  .pv-tag { font-size: 1.2rem; background: #f0f0f0; color: #555; padding: 3px 11px; border-radius: 20px; }
+  .pv-title { font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 800; line-height: 1.2; margin: 0 0 .65rem; color: #111; }
+  .pv-lead { font-size: 1.075rem; color: #555; line-height: 1.65; margin-bottom: 0; }
+
+  /* Gallery */
+  .pv-gallery-wrap { margin-bottom: 1.75rem; }
+  .pv-gallery-wrap .flexslider_thumbs { margin: 0 !important; border: none !important; border-radius: 0 !important; box-shadow: none !important; }
+  .pv-gallery-wrap .flexslider_thumbs .slides > li a { display: block; width: 100%; height: 100%; }
+  .pv-gallery-wrap .flexslider_thumbs .slides > li img { width: 100%; max-height: 85vh; aspect-ratio: 16/9; object-fit: cover; display: block; cursor: zoom-in; }
+  .pv-gallery-wrap .flex-control-nav { bottom: 0; margin: 0; }
+  .pv-gallery-wrap .flex-control-thumbs { background: #1a1a1a; padding: 6px 4px; margin: 0 !important; overflow-x: auto; white-space: nowrap; text-align: center; }
+  .pv-gallery-wrap .flex-control-thumbs li { display: inline-block; float: none; width: auto !important; margin: 0 3px; }
+  .pv-gallery-wrap .flex-control-thumbs img { height: 56px; width: auto; min-width: 56px; max-width: 90px; object-fit: cover; border-radius: 3px; opacity: .6; transition: opacity .15s; cursor: pointer; }
+  .pv-gallery-wrap .flex-control-thumbs img:hover,
+  .pv-gallery-wrap .flex-control-thumbs .flex-active { opacity: 1 !important; }
+  @media (min-width: 480px) {
+    .pv-gallery-wrap .flexslider_thumbs .slides > li img { max-height: 85vh; aspect-ratio: 16/9; object-fit: cover; }
+    .pv-gallery-wrap .flex-control-thumbs img { height: 68px; max-width: 110px; }
+  }
+
+  /* Sidebar */
+  .pv-sidebar { margin-bottom: 2rem; }
+  .pv-sidebar-block { margin-bottom: 1.75rem; }
+  .pv-sidebar-label { font-size: 1.2rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #aaa; margin-bottom: .65rem; }
+  .pv-sidebar-meta { font-size: 1.3rem; color: #555; margin-bottom: .3rem; }
+  .pv-sidebar-meta strong { color: #333; }
+
+  /* Action buttons */
+  .pv-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .pv-btn { display: inline-flex; align-items: center; gap: .45rem; padding: .75rem 1.5rem; border-radius: 7px; font-size: 1.3rem; font-weight: 500; text-decoration: none !important; line-height: 1; transition: background .15s, border-color .15s, color .15s; }
+  .pv-btn-solid { background: #1a1a1a; color: #fff !important; }
+  .pv-btn-solid:hover { background: #333; }
+  .pv-btn-outline { background: transparent; border: 1.5px solid #bbb; color: #333 !important; }
+  .pv-btn-outline:hover { border-color: #444; background: #f5f5f5; }
+
+  /* Downloads */
+  .pv-files { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .45rem; }
+  .pv-files a { display: flex; align-items: center; gap: .6rem; padding: .8rem 1.1rem; background: #f8f8f8; border: 1px solid #e5e5e5; border-radius: 8px; color: #333 !important; text-decoration: none !important; font-size: 1.3rem; font-weight: 500; transition: background .12s; word-break: break-all; }
+  .pv-files a:hover { background: #eeeeee; }
+  .pv-files a .fa { color: #999; flex-shrink: 0; font-size: 1.3rem; }
+
+  /* Main body */
+  .pv-body { font-size: 1.3rem; line-height: 1.8; color: #222; overflow-wrap: break-word; word-break: break-word; }
+  .pv-body img { max-width: 100%; height: auto; border-radius: 6px; display: block; margin: 1rem 0; }
+  .pv-body h1, .pv-body h2 { font-size: 1.75rem; font-weight: 700; margin: 1.5rem 0 .5rem; }
+  .pv-body h3, .pv-body h4 { font-size: 1.5rem; font-weight: 600; margin: 1.25rem 0 .4rem; }
+  .pv-body p { margin: 0 0 .9rem; }
+  .pv-body ul, .pv-body ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+  .pv-body li { margin-bottom: .3rem; }
+  .pv-body a { color: inherit; text-decoration: underline; }
+
+  /* Section title */
+  .pv-section-title { font-size: 1.2rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: #aaa; border-bottom: 2px solid #eee; padding-bottom: .5rem; margin: 2rem 0 1.25rem; }
+
+  /* Updates */
+  .pv-updates { display: flex; flex-direction: column; gap: 1.25rem; }
+  .pv-update { padding: 1.1rem 1.25rem; border-left: 3px solid #ddd; background: #fafafa; border-radius: 0 8px 8px 0; }
+  .pv-update-title { font-size: 1.35rem; font-weight: 700; color: #111; margin-bottom: .5rem; }
+  .pv-update-body { font-size: .95rem; line-height: 1.75; color: #333; }
+  .pv-update-body p { margin: 0 0 .5rem; }
+  .pv-update-body p:last-child { margin-bottom: 0; }
+
+  @media (min-width: 768px) {
+    #single-portfolio { padding-top: 2.5rem; }
+    .pv-sidebar { padding-right: 1.5rem; border-right: 1px solid #eee; margin-bottom: 0; }
+  }
+</style>
+
+<section id="single-portfolio" class="section">
+  <div class="container">
+
+    <!-- Title + lead -->
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="pv-header">
+          <div class="pv-meta-row">
+            <span class="pv-type-badge projectcategory"><%= project.type %></span>
+            <% if (project.subtype) { project.subtype.split(',').forEach(function(t) { t = t.trim(); if (t) { %>
+              <span class="pv-tag"><%= t.replace(/_/g, ' ') %></span>
+            <% }}); } %>
+          </div>
+          <h1 class="pv-title"><%= project.title %></h1>
+          <% if (project.description) { %>
+            <p class="pv-lead"><%= project.description %></p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gallery -->
+    <% if (gallery.length) { %>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="pv-gallery-wrap">
+          <div class="flexslider_thumbs">
+            <ul class="slides popup-gallery">
+              <% gallery.forEach(function(g) { %>
+                <li data-thumb="<%= g.thumb_medium_path %>">
+                  <a href="<%= g.img_path %>">
+                    <img src="<%= g.thumb_medium_wide_path %>" alt="<%= project.title %>">
+                  </a>
+                </li>
+              <% }); %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% } %>
+
+    <!-- Sidebar + body -->
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="row">
+
+          <!-- Sidebar: links & downloads (renders first = top on mobile) -->
+          <div class="col-sm-4 col-md-3 pv-sidebar">
+
+            <% if (project.web_url || project.git_url) { %>
+            <div class="pv-sidebar-block">
+              <div class="pv-sidebar-label">Links</div>
+              <div class="pv-actions">
+                <% if (project.web_url) { %>
+                  <a href="<%= project.web_url %>" target="_blank" rel="noopener" class="pv-btn pv-btn-solid">
+                    <i class="fa fa-globe"></i> Visit Site
+                  </a>
+                <% } %>
+                <% if (project.git_url) { %>
+                  <a href="<%= project.git_url %>" target="_blank" rel="noopener" class="pv-btn pv-btn-outline">
+                    <i class="fa fa-code"></i> Source
+                  </a>
+                <% } %>
+              </div>
+            </div>
+            <% } %>
+
+            <div class="pv-sidebar-block">
+              <div class="pv-sidebar-label">Category</div>
+              <p class="pv-sidebar-meta projectcategory"><%= project.type %></p>
+            </div>
+
+            <% if (files.length) { %>
+            <div class="pv-sidebar-block">
+              <div class="pv-sidebar-label">Downloads</div>
+              <ul class="pv-files">
+                <% files.forEach(function(f) { %>
+                  <li>
+                    <a href="<%= f.file_path %>" download="<%= f.name %>">
+                      <i class="fa fa-download"></i><%= f.name %>
+                    </a>
+                  </li>
+                <% }); %>
+              </ul>
+            </div>
+            <% } %>
+
+          </div><!-- /sidebar -->
+
+          <!-- Body: description + updates -->
+          <div class="col-sm-8 col-md-9">
+            <% if (project.longdescription) { %>
+              <div class="pv-body"><%- project.longdescription %></div>
+            <% } %>
+
+            <% if (updates.length) { %>
+              <div class="pv-section-title">Updates</div>
+              <div class="pv-updates">
+                <% updates.forEach(function(u) { %>
+                  <div class="pv-update">
+                    <div class="pv-update-title"><%= u.title %></div>
+                    <div class="pv-update-body"><%- u.description %></div>
+                  </div>
+                <% }); %>
+              </div>
+            <% } %>
+          </div><!-- /body -->
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "NewsArticle",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://www.sigmaprojects.org/p/<%= project.ses_title %>" },
+  "headline": "<%= project.title.replace(/"/g, '&quot;') %>",
+  "datePublished": "<%= project.created %>",
+  "dateModified": "<%= project.updated %>",
+  "author": { "@type": "Organization", "name": "Sigma Projects" },
+  "publisher": { "@type": "Organization", "name": "Sigma Projects", "logo": { "@type": "ImageObject", "url": "https://www.sigmaprojects.org/includes/images/favicons/apple-icon-60x60.png", "width": 60, "height": 60 } },
+  "description": "<%= project.description.replace(/"/g, '&quot;') %>"
+}
+</script>
+
+<script>
+$(window).on('load', function() {
+  if ($('.flexslider_thumbs').length) {
+    $('.flexslider_thumbs').flexslider({ animation: 'slide', controlNav: 'thumbnails', smoothHeight: false });
+  }
+
+  // Initialize Magnific Popup on the gallery
+  $('.popup-gallery').magnificPopup({
+    delegate: 'a',
+    type: 'image',
+    tLoading: 'Loading image #%curr%...',
+    mainClass: 'mfp-img-mobile',
+    gallery: {
+      enabled: true,
+      navigateByImgClick: true,
+      preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+    },
+    image: {
+      tError: '<a href="%url%">The image #%curr%</a> could not be loaded.'
+    }
+  });
+});
+</script>

@@ -1,0 +1,22 @@
+services:
+  sigmaprojectsorg:
+    container_name: sigmaprojectsorg
+    # REMOVE THE BUILD LINE WHEN USING A PRE-BUILT IMAGE FROM DOCKER HUB
+    build: .
+    image: sigmaprojects/sigmaprojects.org-docker:latest
+    ports:
+      - "8384:8384"
+    volumes:
+      - ./data:/app/data
+      - ./uploads:/app/uploads
+    environment:
+      - PORT=8384
+      - SESSION_SECRET=changeme_use_a_long_random_string
+      - ADMIN_PASSWORD=changeme
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://host.docker.internal:8384/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s

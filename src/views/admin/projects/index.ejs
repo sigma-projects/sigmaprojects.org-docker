@@ -1,0 +1,38 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="mb-0">Projects</h2>
+  <a href="/admin/projects/edit" class="btn btn-primary">+ Add New Project</a>
+</div>
+
+<div class="card shadow-sm">
+  <div class="table-responsive">
+    <table class="table table-striped table-hover mb-0">
+      <thead class="table-dark">
+        <tr>
+          <th>Title</th>
+          <th>Type</th>
+          <th>Sub Types</th>
+          <th>Public</th>
+          <th>Images</th>
+          <th>Files</th>
+          <th>Updates</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% projects.forEach(function(p) { %>
+          <tr>
+            <td><a href="/admin/projects/edit?projectid=<%= p.projectid %>"><%= p.title || '(no title)' %></a></td>
+            <td><%= p.type %></td>
+            <td><%= p.subtype %></td>
+            <td><span class="badge <%= p.public ? 'bg-success' : 'bg-secondary' %>"><%= p.public ? 'Public' : 'Hidden' %></span></td>
+            <td><%= p.imageCount %></td>
+            <td><%= p.fileCount %></td>
+            <td><%= p.updateCount %></td>
+          </tr>
+        <% }); %>
+        <% if (!projects.length) { %>
+          <tr><td colspan="7" class="text-center text-muted py-4">No projects yet. <a href="/admin/projects/edit">Add one.</a></td></tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>

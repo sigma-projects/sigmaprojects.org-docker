@@ -1,0 +1,282 @@
+<style>
+  #editprojectimages { list-style: none; margin: 0; padding: 0; min-height: 40px; }
+  #editprojectimages li { display: inline-block; margin: 4px; cursor: move; position: relative; vertical-align: top; }
+  #editprojectimages li:hover::after {
+    content: '×';
+    position: absolute; top: 2px; right: 2px;
+    background: rgba(220,53,69,.85); color: #fff;
+    width: 18px; height: 18px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; line-height: 1; pointer-events: none;
+  }
+  .section-card { border: 1px solid #dee2e6; border-radius: .5rem; margin-bottom: 1.25rem; }
+  .section-card .section-header {
+    display: flex; align-items: center; gap: .5rem;
+    padding: .75rem 1.25rem;
+    border-bottom: 1px solid #dee2e6;
+    background: #f8f9fa;
+    border-radius: .5rem .5rem 0 0;
+    font-weight: 600; font-size: .875rem; letter-spacing: .02em; text-transform: uppercase; color: #495057;
+  }
+  .section-card .section-body { padding: 1.25rem; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 576px) { .field-row { grid-template-columns: 1fr; } }
+</style>
+<link rel="stylesheet" href="/includes/css/fileuploader.css">
+<link rel="stylesheet" href="/includes/css/editproject.css">
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet">
+<style>
+  /* Quill overrides — must come after quill.snow.css */
+  .ql-editor { font-family: 'Roboto', sans-serif; }
+  #longdescription-editor .ql-editor { min-height: 320px; }
+  #update_description-editor .ql-editor { min-height: 180px; }
+  /* Font classes applied to editor content */
+  .ql-font-arial        { font-family: Arial, sans-serif; }
+  .ql-font-georgia      { font-family: Georgia, serif; }
+  .ql-font-courier-new  { font-family: 'Courier New', monospace; }
+  .ql-font-verdana      { font-family: Verdana, sans-serif; }
+  .ql-font-tahoma       { font-family: Tahoma, sans-serif; }
+  .ql-font-impact       { font-family: Impact, sans-serif; }
+  /* Font picker dropdown labels */
+  .ql-snow .ql-picker.ql-font .ql-picker-label::before,
+  .ql-snow .ql-picker.ql-font .ql-picker-item::before              { content: 'Roboto'; }
+  .ql-snow .ql-picker.ql-font [data-value=arial]::before           { content: 'Arial';       font-family: Arial; }
+  .ql-snow .ql-picker.ql-font [data-value=georgia]::before         { content: 'Georgia';     font-family: Georgia; }
+  .ql-snow .ql-picker.ql-font [data-value=courier-new]::before     { content: 'Courier New'; font-family: 'Courier New'; }
+  .ql-snow .ql-picker.ql-font [data-value=verdana]::before         { content: 'Verdana';     font-family: Verdana; }
+  .ql-snow .ql-picker.ql-font [data-value=tahoma]::before          { content: 'Tahoma';      font-family: Tahoma; }
+  .ql-snow .ql-picker.ql-font [data-value=impact]::before          { content: 'Impact';      font-family: Impact; }
+</style>
+
+<div class="mb-4">
+  <a href="/admin/projects" class="text-decoration-none text-secondary small">← All Projects</a>
+  <h3 class="mb-0 mt-1 fw-bold">
+    <%= project ? (project.title || 'Untitled Project') : 'New Project' %>
+  </h3>
+</div>
+
+<% if (saved) { %>
+  <div class="alert alert-success alert-dismissible fade show mb-4">
+    Project saved successfully.
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+<% } %>
+
+<form id="saveProjectForm" role="form" action="/admin/projects/save"
+      method="post" enctype="multipart/form-data">
+  <input name="projectid" type="hidden" value="<%= project ? project.projectid : '' %>">
+
+  <!-- CONTENT -->
+  <div class="section-card">
+    <div class="section-header">Content</div>
+    <div class="section-body">
+
+      <div class="mb-3">
+        <label for="title" class="form-label fw-semibold">Title</label>
+        <input type="text" class="form-control form-control-lg" id="title" name="title"
+               placeholder="Project title"
+               value="<%= project ? project.title : '' %>" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="description" class="form-label fw-semibold">Short Description</label>
+        <input type="text" class="form-control" id="description" name="description"
+               placeholder="One-line summary shown in project cards (~35 chars)"
+               value="<%= project ? project.description : '' %>">
+      </div>
+
+      <div class="mb-0">
+        <label class="form-label fw-semibold">Long Description</label>
+        <textarea class="form-control" name="longdescription" id="longdescription"
+                  rows="10" placeholder="Full project description"><%= project ? project.longdescription : '' %></textarea>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="section-card">
+    <div class="section-header">Settings</div>
+    <div class="section-body">
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold d-block">Visibility</label>
+        <div class="d-flex gap-3">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="public"
+                   id="publictrue" value="1"
+                   <%= (!project || project.public) ? 'checked' : '' %>>
+            <label class="form-check-label" for="publictrue">
+              <span class="badge bg-success">Public</span>
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="public"
+                   id="publicfalse" value="0"
+                   <%= (project && !project.public) ? 'checked' : '' %>>
+            <label class="form-check-label" for="publicfalse">
+              <span class="badge bg-secondary">Hidden</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-row mb-3">
+        <div>
+          <label for="type" class="form-label fw-semibold">Project Type</label>
+          <select class="form-select" name="type" id="type">
+            <option value="digital"   <%= (project && project.type === 'digital')   ? 'selected' : '' %>>Digital</option>
+            <option value="product"   <%= (!project || project.type === 'product')  ? 'selected' : '' %>>Product</option>
+            <option value="landscape" <%= (project && project.type === 'landscape') ? 'selected' : '' %>>Landscape</option>
+          </select>
+          <div class="form-text">Digital (Web/Code) · Product (Models/Prints) · Landscape (Environmental)</div>
+        </div>
+        <div>
+          <label for="subtype" class="form-label fw-semibold">Sub Types</label>
+          <input type="text" name="subtype" class="form-control" id="subtype"
+                 placeholder="e.g. toyota,3d_printing"
+                 value="<%= project ? project.subtype : '' %>">
+          <div class="form-text">Comma-separated, no spaces.</div>
+        </div>
+      </div>
+
+      <div class="field-row mb-0">
+        <div>
+          <label for="web_url" class="form-label fw-semibold">Web URL</label>
+          <input type="text" name="web_url" class="form-control" id="web_url"
+                 placeholder="https://..."
+                 value="<%= project ? project.web_url : '' %>">
+        </div>
+        <div>
+          <label for="git_url" class="form-label fw-semibold">Source Code URL</label>
+          <input type="text" name="git_url" class="form-control" id="git_url"
+                 placeholder="https://github.com/..."
+                 value="<%= project ? project.git_url : '' %>">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- THUMBNAIL -->
+  <div class="section-card">
+    <div class="section-header">Thumbnail</div>
+    <div class="section-body">
+      <% if (project && project.thumbnail_path) { %>
+        <div class="mb-3">
+          <img src="<%= project.thumbnail_path %>"
+               class="img-fluid rounded border" style="max-height:140px;">
+        </div>
+      <% } %>
+      <input type="file" class="form-control" name="thumbnail" accept="image/*">
+      <div class="form-text mt-1">Auto-cropped to 600×338px (16:9) on save.</div>
+    </div>
+  </div>
+
+  <!-- GALLERY IMAGES -->
+  <div class="section-card">
+    <div class="section-header">Gallery Images</div>
+    <div class="section-body">
+      <div class="text-muted small mb-3">Drag to reorder. Click an image to delete it. Recommended: 954×533px.</div>
+      <input type="hidden" name="imageids" value="<%= gallery.map(g => g.id).join(',') %>">
+      <div id="uploadimages" data-projectid="<%= project ? project.projectid : '' %>"></div>
+      <ul id="editprojectimages" class="mt-2">
+        <% gallery.forEach(function(g) { %>
+          <li id="<%= g.id %>" data-id="<%= g.id %>">
+            <img src="<%= g.thumb_small_path %>" width="80" height="80" class="img-thumbnail">
+          </li>
+        <% }); %>
+        <div style="clear:both;"></div>
+      </ul>
+    </div>
+  </div>
+
+  <!-- FILES -->
+  <% if (project && project.projectid) { %>
+  <div class="section-card">
+    <div class="section-header">Files</div>
+    <div class="section-body">
+      <div class="text-muted small mb-3">Files are publicly downloadable. Click a file to delete it.</div>
+      <input type="hidden" name="fileids" value="<%= files.map(f => f.id).join(',') %>">
+      <div id="uploadfiles" data-projectid="<%= project ? project.projectid : '' %>"></div>
+      <ul id="editprojectfiles" class="list-group mt-2">
+        <% files.forEach(function(f) { %>
+          <li data-id="<%= f.id %>"
+              class="list-group-item d-flex justify-content-between align-items-center"
+              style="cursor:pointer;" title="Click to delete">
+            <span class="text-truncate me-2"><%= f.name %></span>
+            <span class="text-danger fw-bold flex-shrink-0">×</span>
+          </li>
+        <% }); %>
+      </ul>
+    </div>
+  </div>
+  <% } %>
+
+  <!-- ACTIONS -->
+  <div class="d-flex align-items-center gap-3 mb-5 pt-1">
+    <button type="submit" class="btn btn-dark px-4">Save Project</button>
+    <% if (project && project.projectid) { %>
+      <div class="form-check mb-0 ms-auto">
+        <input class="form-check-input" type="checkbox"
+               name="delete_project" value="on" id="deleteProject">
+        <label class="form-check-label text-danger small" for="deleteProject">
+          Delete this project
+        </label>
+      </div>
+    <% } %>
+  </div>
+
+</form>
+
+<!-- PROJECT UPDATES — outside saveProjectForm to avoid nested forms -->
+<% if (project && project.projectid) { %>
+<div class="section-card mb-5">
+  <div class="section-header d-flex justify-content-between w-100">
+    <span>Project Updates</span>
+    <% if (updates.length) { %>
+      <span class="badge bg-secondary fw-normal"><%= updates.length %></span>
+    <% } %>
+  </div>
+  <div class="section-body">
+
+    <% updates.forEach(function(u) { %>
+      <div class="border rounded p-3 mb-3">
+        <div class="d-flex justify-content-between align-items-start gap-3">
+          <strong><%= u.title %></strong>
+          <form action="/admin/projects/updates/delete" method="post"
+                onsubmit="return confirm('Delete this update?')"
+                class="flex-shrink-0">
+            <input type="hidden" name="id" value="<%= u.id %>">
+            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+          </form>
+        </div>
+        <div class="mt-2 text-muted small"><%- u.description %></div>
+      </div>
+    <% }); %>
+
+    <% if (updates.length) { %><hr class="my-4"><% } %>
+
+    <h6 class="mb-3 fw-semibold">Add Update</h6>
+    <form action="/admin/projects/updates/save" method="post">
+      <input type="hidden" name="projectid" value="<%= project.projectid %>">
+      <div class="mb-2">
+        <input type="text" class="form-control" name="title" placeholder="Update title">
+      </div>
+      <div class="mb-3">
+        <textarea class="form-control" name="description"
+                  id="update_description" rows="4"
+                  placeholder="Describe what changed..."></textarea>
+      </div>
+      <button type="submit" class="btn btn-outline-secondary btn-sm">Add Update</button>
+    </form>
+
+  </div>
+</div>
+<% } %>
+
+<script src="/includes/js/jquery-ui.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
+<script src="/includes/js/fileuploader.js"></script>
+<script src="/includes/js/editproject.js"></script>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= htmltitle || 'SigmaProjects.org' %></title>
+  <link rel="shortcut icon" href="/includes/images/favicons/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="57x57" href="/includes/images/favicons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/includes/images/favicons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/includes/images/favicons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/includes/images/favicons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/includes/images/favicons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/includes/images/favicons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/includes/images/favicons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/includes/images/favicons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/includes/images/favicons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/includes/images/favicons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/includes/images/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/includes/images/favicons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/includes/images/favicons/favicon-16x16.png">
+  <meta name="msapplication-TileColor" content="#000000">
+  <meta name="msapplication-TileImage" content="/includes/images/favicons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#000000">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/includes/lib/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="/includes/lib/fontawesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/includes/css/sigma-font-v1.css">
+  <link rel="stylesheet" href="/includes/lib/ionicons/css/ionicons.css">
+  <link rel="stylesheet" href="/includes/lib/owlcarousel/owl-carousel/owl.carousel.css">
+  <link rel="stylesheet" href="/includes/lib/owlcarousel/owl-carousel/owl.theme.css">
+  <link rel="stylesheet" href="/includes/lib/FlexSlider/flexslider.css">
+  <link rel="stylesheet" href="/includes/lib/magnific-popup/dist/magnific-popup.css">
+  <link rel="stylesheet" href="/includes/css/main.css">
+  <link rel="stylesheet" href="/includes/css/raleway.css">
+  <link rel="stylesheet" href="/includes/css/roboto.css">
+  <link rel="stylesheet" href="/includes/css/ie_fix.css">
+
+  <!-- Head JS -->
+  <script src="/includes/lib/components-modernizr/modernizr.js"></script>
+  <script src="/includes/lib/jquery/dist/jquery.js"></script>
+  <script src="/includes/lib/bootstrap/dist/js/bootstrap.js"></script>
+
+  <%- style %>
+</head>
+
+<body data-spy="scroll" data-target="#main-nav-collapse" data-offset="100" style="display: flex; flex-direction: column; min-height: 100vh; background-color: #fff;">
+
+<div class="page-loader">
+  <div class="loader">Loading...</div>
+</div>
+
+<!-- Fixed Top Navigation -->
+<nav id="fixedTopNav" class="navbar navbar-fixed-top main-navigation" itemscope itemtype="https://schema.org/SiteNavigationElement">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="ion-drag"></span>
+      </button>
+      <div class="navbar-brand" itemscope itemtype="https://schema.org/Organization">
+        <span itemprop="name" class="sr-only">Reign</span>
+        <a itemprop="url" href="/">
+          Sigma <span class="icon-sigma-gear-thin"></span> Projects
+        </a>
+      </div>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-nav-collapse">
+      <ul class="nav navbar-nav navbar-right" role="menu">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span>About</span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/#whatwedo">What We Do</a></li>
+            <li><a href="/whoweare">Who We Are</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="/projects/search/" class="dropdown-toggle" data-toggle="dropdown"><span>Design Solutions</span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/projects/search/digital">Digital</a></li>
+            <li><a href="/projects/search/product">Product</a></li>
+            <li><a href="/projects/search/landscape">Landscape</a></li>
+          </ul>
+        </li>
+        <li><a href="/contact"><span>Contact Us</span></a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<!-- /Fixed Top Navigation -->
+
+<main style="flex:1; background-color:#fff;">
+<header id="header" class="home-parallax home-fade dark-bg header-inner" style="position: relative; overflow: hidden;">
+  <div class="color-overlay"></div>
+</header>
+
+<%- body %>
+</main>
+
+<!-- footer -->
+<footer id="footer" class="footer" style="flex-shrink: 0;">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3 col-sm-4">
+        <p class="copyright text-xs-center">&copy; <%= new Date().getFullYear() %> SigmaProjects.org</p>
+      </div>
+      <div class="col-md-5 col-sm-4">
+        <ul class="footer-social-block">
+          <li><a href="https://twitter.com/sigma_projects" target="_blank"><i class="fa fa-twitter"></i></a></li>
+          <li><a href="https://www.instagram.com/sigmaprojects/" target="_blank"><i class="fa fa-instagram"></i></a></li>
+          <li><a href="http://www.shapeways.com/designer/SigmaProjects" target="_blank"><i class="fa fa-shapeways"></i></a></li>
+          <li><a href="https://github.com/sigmaprojects/" target="_blank"><i class="fa fa-github"></i></a></li>
+        </ul>
+      </div>
+      <div class="col-md-4 col-sm-4">
+        <div class="footer-menu text-xs-center">
+          <a href="/privacy">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<a id="totop" href="#totop"><i class="fa fa-angle-double-up"></i></a>
+
+<!-- Deferred JS -->
+<script src="/includes/lib/imagesloaded/imagesloaded.pkgd.min.js"></script>
+<script src="/includes/lib/isotope/dist/isotope.pkgd.min.js"></script>
+<script src="/includes/lib/owlcarousel/owl-carousel/owl.carousel.js"></script>
+<script src="/includes/lib/waypoints/lib/jquery.waypoints.min.js"></script>
+<script src="/includes/lib/waypoints/lib/shortcuts/inview.min.js"></script>
+<script src="/includes/lib/FlexSlider/jquery.flexslider.js"></script>
+<script src="/includes/lib/magnific-popup/dist/jquery.magnific-popup.js"></script>
+<script src="/includes/js/main.js"></script>
+
+<%- script %>
+
+<% if (!adminUser) { %>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-3393421-7', 'auto');
+  ga('send', 'pageview');
+</script>
+<% } %>
+
+</body>
+</html>
