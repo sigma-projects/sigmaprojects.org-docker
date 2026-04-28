@@ -87,7 +87,14 @@ router.post('/save', auth, upload.single('thumbnail'), async (req, res) => {
     : '';
 
   if (req.file) {
-    const fname = `${ses_title}.jpg`;
+    // Delete old thumbnail if it exists
+    if (thumbnail_path) {
+      const oldThumb = path.join(__dirname, '../../../', thumbnail_path);
+      if (fs.existsSync(oldThumb)) {
+        try { fs.unlinkSync(oldThumb); } catch (e) { /* ignore */ }
+      }
+    }
+    const fname = `${ses_title}_${Date.now()}.jpg`;
     const dest = path.join(thumbnailsDir, fname);
     await sharp(req.file.buffer)
       .resize(600, 338, { fit: 'cover' })
